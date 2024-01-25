@@ -15,16 +15,20 @@ public class Bank_Statements_Analyzer {
 
     private static final String RESOURCES = "src/main/resources/";
 
-    public static void main(String[] args) throws IOException {
-        Path path = Paths.get(RESOURCES + "statements.csv");
+    public void analyze(final String fileName, BankStatementsParser parser) throws IOException {
+        Path path = Paths.get(RESOURCES + fileName);
         List<String> lines = Files.readAllLines(path);
 
-        BankStatmentsCSVParser parser = new BankStatmentsCSVParser();
-        List<BankTransaction> listOfTransactions = parser.parseLinesFromCSV(lines);
-        listOfTransactions.stream().forEach((t) -> {
-            System.out.println(t);
-        });
-        System.out.println("total amount: " + BankTransaction.calculateTotalAmount(listOfTransactions));
-        System.out.println("Transactions in February: " + BankTransaction.selectInMonth(listOfTransactions, Month.FEBRUARY));
+        List<BankTransaction> listOfTransactions = parser.parseLinesFrom(lines);
+        BankStatementsProcessor processor = new BankStatementsProcessor(listOfTransactions);
+
+        System.out.println("total amount: "
+                + BankStatementsProcessor.calculateTotalAmount(listOfTransactions));
+        System.out.println("Transactions in February: "
+                + BankStatementsProcessor.selectInMonth(listOfTransactions,
+                        Month.FEBRUARY));
+
+        System.out.println("Total in Tesco: " + processor.calculateTotalForCategory("Tesco"));
+        System.out.println("Total in January: " + processor.calculateTotalInMonth(Month.JANUARY));
     }
 }

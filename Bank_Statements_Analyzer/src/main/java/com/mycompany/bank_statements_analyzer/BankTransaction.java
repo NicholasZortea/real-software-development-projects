@@ -5,9 +5,6 @@
 package com.mycompany.bank_statements_analyzer;
 
 import java.time.LocalDate;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -62,23 +59,4 @@ public class BankTransaction {
     public int hashCode() {
         return Objects.hash(date, amount, description);
     }
-
-    public static double calculateTotalAmount(List<BankTransaction> transactions) {
-        double total = 0;
-        for (BankTransaction transaction : transactions) {
-            total += transaction.amount;
-        }
-        return total;
-    }
-
-    public static List<BankTransaction> selectInMonth(List<BankTransaction> transactions, Month month) {
-        List<BankTransaction> transactionsInMonth = new ArrayList<BankTransaction>();
-        for (BankTransaction transaction : transactions) {
-            if (transaction.date.getMonth() == month) {
-                transactionsInMonth.add(transaction);
-            }
-        }
-        return transactionsInMonth;
-    }
-
 }
